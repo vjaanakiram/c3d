@@ -126,5 +126,11 @@ package com.view {
 			dispatchEvent(new Event(Cont3D.MSG));
 		}
 		
+		public function addSnake(snake:Box):void{
+			trace("dd2 added new snake part...")
+			rootContainer.addChild(snake);
+			snake.geometry.upload(stage3D.context3D);
+		}
+		
 	}
 }

@@ -9,6 +9,7 @@ package com.view
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	import alternativa.engine3d.shadows.DirectionalLightShadow;
 	
+	import com.Elements.MySnake;
 	import com.Utils3d.SpringCameraController;
 	
 	import flash.display.BitmapData;
@@ -23,7 +24,13 @@ package com.view
 		[Embed(source="/images/grass.jpg")] private static const EmbedGrassDiffuse:Class;
 		
 		private var controller:SimpleObjectController;
-		public function BalaBase3d(ww:Number,hh:Number,scaleMode:Boolean){
+		public var mySnake:MySnake;
+		public var ww:Number;
+		public var hh:Number;
+		
+		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
+			ww = _ww;
+			hh = _hh;
 			super(ww,hh,scaleMode);
 			super.addEventListener("BR",BReady);
 		}
@@ -34,6 +41,7 @@ package com.view
 		}
 		private var cameraContoller:SpringCameraController
 		private function addElements():void{
+			mySnake = new MySnake(this);
 			controller = new SimpleObjectController(stage, camera, 200);
 			controller.mouseSensitivity = .01;
 			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
@@ -54,7 +62,7 @@ package com.view
 			platform.geometry.upload(stage3D.context3D);
 			platform.setMaterialToAllSurfaces(barkMaterial);
 			platform.z = 25;
-			rootContainer.addChild(platform);
+			//rootContainer.addChild(platform);
 			
 			var grass:Plane = new Plane(900, 900);
 			grass.geometry.upload(stage3D.context3D);
@@ -80,7 +88,7 @@ package com.view
 			directionalLight.shadow = shadow;
 			
 			cameraContoller = new SpringCameraController(this,camera,100);
-			cameraContoller.target=box;
+			//cameraContoller.target=box;
 			
 			camera.fov=100*Math.PI/180;
 			
@@ -93,7 +101,7 @@ package com.view
 		
 		public override function onEnterFrame(e:Event=null):void{
 			super.onEnterFrame();
-			cameraContoller.update();
+			//cameraContoller.update();
 			controller.update();
 		}
 	}

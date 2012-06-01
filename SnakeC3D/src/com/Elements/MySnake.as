@@ -2,7 +2,7 @@ package com.Elements
 {
 	import com.events.CustomEvent;
 	import com.model.Remote;
-	import com.view.B3d;
+	import com.view.BalaBase3d;
 	
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -12,8 +12,8 @@ package com.Elements
 		
 		public static const I_GOT_FOOD:String = "igotfood";
 		
-		public function MySnake(){
-			super(false);
+		public function MySnake(base3D:BalaBase3d){
+			super(false,base3D);
 			addEventListener(Event.ADDED_TO_STAGE,addedToStage);
 		}
 		
@@ -69,7 +69,7 @@ package com.Elements
 			trace("dd2 markers_vector",markers_vector.length);
 		}
 		
-		public function currentStatusOfMySnake(needFoodData:Boolean):String{
+		/*public function currentStatusOfMySnake(needFoodData:Boolean):String{
 			var xml:String = "<o>";
 			for(var i:int = 0; i<snake_vector.length; i++){
 				var nm:XML =  <n x={snake_vector[i].x} y={snake_vector[i].y} d={snake_vector[i].direction}/>
@@ -91,6 +91,6 @@ package com.Elements
 			}
 			xml = xml+"</o>";
 			return xml;
-		}
+		}*/
 	}
 }

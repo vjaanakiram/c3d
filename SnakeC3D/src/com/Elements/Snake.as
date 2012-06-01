@@ -4,9 +4,10 @@
  */
 package com.Elements  
 {
-	import com.controller.MoveController;
+	import alternativa.engine3d.core.Object3D;
+	
 	import com.model.PlayerDataVO;
-	import com.view.B3d;
+	import com.view.BalaBase3d;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -32,20 +33,20 @@ package com.Elements
 		public var flag:Boolean; //is it allowed to change direction? bala
 		private var score:Number;
 		private var score_tf:TextField; //the Textfield showing the score
-		private var board:B3d;
 		private var remoteSnake:Boolean;
 		public var playerData:PlayerDataVO = new PlayerDataVO();
+		private var base:BalaBase3d;
 		
-		public function Snake(_remoteSnake:Boolean) 
-		{
+		public function Snake(_remoteSnake:Boolean,_base:BalaBase3d) {
+			base = _base;
 			remoteSnake = _remoteSnake;
 			//if(stage)
-			this.addEventListener(Event.ADDED_TO_STAGE, init);
+			//this.addEventListener(Event.ADDED_TO_STAGE, init);
+			init();
 		}
 		
 		private function init(e:Event = null):void
 		{
-			board = B3d(this.parent)
 			snake_vector = new Vector.<Element>;
 			markers_vector = new Vector.<Object>;
 			space_value = 2;
@@ -102,12 +103,13 @@ package com.Elements
 				who.x = lastXPos;
 				who.y = lastYPos - snake_vector[0].height - space_value;
 			}
-			this.addChild(who);
+			//this.addChild(who);
+			base.addSnake(who);
 		}
 		
 		//Moving Snake..
 		private function moveIt(e:TimerEvent):void{
-			if(MoveController.apple && remoteSnake == false){
+			/*if(MoveController.apple && remoteSnake == false){
 				if (snake_vector[0].x == MoveController.apple.x && snake_vector[0].y == MoveController.apple.y){
 					//placeApple();
 					trace("dd1 dispatching..I_GOT_FOOD");
@@ -124,9 +126,9 @@ package com.Elements
 						snake_vector[snake_vector.length-2].y,
 						snake_vector[snake_vector.length-2].direction);
 				}
-			}
+			}*/
 			if(remoteSnake == false){
-				if (snake_vector[0].x > B3d.WIDTH-snake_vector[0].width || snake_vector[0].x < 0 || snake_vector[0].y > B3d.HEIGHT-snake_vector[0].height || snake_vector[0].y < 0){
+				if (snake_vector[0].x > base.ww-snake_vector[0].width || snake_vector[0].x < 0 || snake_vector[0].y > base.hh-snake_vector[0].height || snake_vector[0].y < 0){
 					GAME_OVER();
 				}
 			}
@@ -181,8 +183,8 @@ package com.Elements
 		{
 			dead = true;
 			timer.stop();
-			while (this.numChildren)
-				this.removeChildAt(0);
+			/*while (base.rootContainer.numChildren)
+				this.removeChildAt(0);*/
 			timer.removeEventListener(TimerEvent.TIMER,moveIt);
 			//stage.removeEventListener(KeyboardEvent.KEY_DOWN,directionChanged);
 			init();
