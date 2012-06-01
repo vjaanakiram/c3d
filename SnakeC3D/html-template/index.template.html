@@ -45,12 +45,12 @@
             params.quality = "high";
             params.bgcolor = "${bgcolor}";
             params.allowscriptaccess = "sameDomain";
+            params.wmode="direct" //bala
             params.allowfullscreen = "true";
             var attributes = {};
             attributes.id = "${application}";
             attributes.name = "${application}";
             attributes.align = "middle";
-             params.wmode="direct";  //bala
             swfobject.embedSWF(
                 "${swf}.swf", "flashContent", 
                 "${width}", "${height}", 
