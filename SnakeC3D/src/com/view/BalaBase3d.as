@@ -46,13 +46,14 @@ package com.view
 			addElements();
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownFun);
 		}
-		private var cameraContoller:SpringCameraController
+		//private var cameraContoller:SpringCameraController
 		private function addElements():void{
 			mySnake = new MySnake();
 			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
 			rootContainer.addChild(mySnake);
 			controller = new SimpleObjectController(stage, camera, 200);
 			controller.mouseSensitivity = .01;
+			controller.unbindAll();
 			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
 			var grass_normal:BitmapTextureResource = new BitmapTextureResource(new BitmapData(1, 1, false, 0x7F7FFF));
 			
@@ -96,16 +97,17 @@ package com.view
 			//shadow.addCaster(box);
 			directionalLight.shadow = shadow;
 			
-			cameraContoller = new SpringCameraController(this,camera,100);
+			
 			//cameraContoller.target=box;
 			
 			camera.fov=100*Math.PI/180;
 			
-			cameraContoller.mass = 30;
-			cameraContoller.damping = 30;
-			cameraContoller.stiffness = 1;
-			cameraContoller.positionOffset = new Vector3D(50, 200, 100);
-			cameraContoller.lookOffset = new Vector3D(0, 0, 0);
+			//cameraContoller = new SpringCameraController(this,camera,100);
+			//cameraContoller.mass = 30;
+			//cameraContoller.damping = 30;
+			//cameraContoller.stiffness = 1;
+			//cameraContoller.positionOffset = new Vector3D(50, 200, 100);
+			//cameraContoller.lookOffset = new Vector3D(0, 0, 0);
 		}
 		
 		private function addedNewSnakePart(e:Event):void{

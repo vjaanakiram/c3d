@@ -27,7 +27,7 @@ package com.Elements
 		public var timer:Timer;//for sync to Remote Time on Board
 		private var dead:Boolean;
 		private var min_elements:int; //holds how many parts should the snake have at the beginning
-		//private var apple:Element; //Our apple
+		private var apple:Element; //Our apple
 		private var space_value:Number; //space between the snake parts
 		public var last_button_down:uint; //the keyCode of the last button pressed to any snake (bala)
 		public var flag:Boolean; //is it allowed to change direction? bala
@@ -35,6 +35,7 @@ package com.Elements
 		private var score_tf:TextField; //the Textfield showing the score
 		private var remoteSnake:Boolean;
 		public var playerData:PlayerDataVO = new PlayerDataVO();
+		private var brickSize:Number = 15;
 		//private var base:BalaBase3d;
 		public static const ADDED_PART:String = "addedsnakepart";
 		
@@ -62,7 +63,7 @@ package com.Elements
 			
 			//Create the first <min_elements> Snake parts
 			for(var i:int=0;i<min_elements;++i){
-				snake_vector[i] = new Element(0x00AAFF,1,15,15);
+				snake_vector[i] = new Element(0x00AAFF,1,brickSize,brickSize);
 				//snake_vector[i].rotationZ = Math.random()*45;
 				snake_vector[i].direction = "R"; //The starting direction of the snake
 				if (i == 0){
@@ -74,7 +75,7 @@ package com.Elements
 				}
 			}
 			
-			//placeApple(false);  //for 1st time board will add
+			placeApple(snake_vector,false);  //for 1st time board will add
 			timer.addEventListener(TimerEvent.TIMER,moveIt);
 			//stage.addEventListener(KeyboardEvent.KEY_DOWN,directionChanged);
 			timer.start();
@@ -96,12 +97,12 @@ package com.Elements
 			else if(dirOfLast == "U")
 			{
 				who.x = lastXPos;
-				who.y = lastYPos + snake_vector[0].height + space_value;
+				who.y = lastYPos - snake_vector[0].height + space_value;
 			}
 			else if(dirOfLast == "D")
 			{
 				who.x = lastXPos;
-				who.y = lastYPos - snake_vector[0].height - space_value;
+				who.y = lastYPos + snake_vector[0].height - space_value;
 			}
 			//this.addChild(who);
 			//base.addSnake(who);
@@ -111,24 +112,26 @@ package com.Elements
 		
 		//Moving Snake..
 		private function moveIt(e:TimerEvent):void{
-			/*if(MoveController.apple && remoteSnake == false){
-				if (snake_vector[0].x == MoveController.apple.x && snake_vector[0].y == MoveController.apple.y){
+			if(apple && remoteSnake == false){
+				if (snake_vector[0].x == apple.x && snake_vector[0].y == apple.y){
 					//placeApple();
-					trace("dd1 dispatching..I_GOT_FOOD");
+					trace("3dd1 dispatching..I_GOT_FOOD");
 					dispatchEvent(new Event(MySnake.I_GOT_FOOD));
 					//show the current Score
-					score += MoveController.apple.catchValue;
+					score += apple.catchValue;
 					score_tf.text = "Score:" + String(score);
 					playerData.score = String(score);
 					//Attach a new snake Element
-					snake_vector.push(new Element(0x00AAFF,1,10,10));
+					snake_vector.push(new Element(0x00AAFF,1,brickSize,brickSize));
 					snake_vector[snake_vector.length-1].direction = snake_vector[snake_vector.length-2].direction; //lastOneRichtung
 					attachElement(snake_vector[snake_vector.length-1],
 						(snake_vector[snake_vector.length-2].x),
 						snake_vector[snake_vector.length-2].y,
 						snake_vector[snake_vector.length-2].direction);
 				}
-			}*/
+			}
+			
+			
 			if(remoteSnake == false){
 				if (snake_vector[0].x > BalaBase3d.ww-snake_vector[0].width || snake_vector[0].x < 0 || snake_vector[0].y > BalaBase3d.hh-snake_vector[0].height || snake_vector[0].y < 0){
 					GAME_OVER();
@@ -160,8 +163,7 @@ package com.Elements
 				
 				//Move the boy
 				var DIRECTION:String = snake_vector[i].direction;
-				switch (DIRECTION)
-				{
+				switch (DIRECTION){
 					case "R" :
 						snake_vector[i].x += snake_vector[i].width + space_value;
 						break;
@@ -169,10 +171,10 @@ package com.Elements
 						snake_vector[i].x -= snake_vector[i].width + space_value;
 						break;
 					case "D" :
-						snake_vector[i].y += snake_vector[i].height + space_value;
+						snake_vector[i].y -= snake_vector[i].height + space_value;
 						break;
 					case "U" :
-						snake_vector[i].y -= snake_vector[i].width + space_value;
+						snake_vector[i].y += snake_vector[i].width + space_value;
 						break;
 				}
 				
@@ -181,16 +183,41 @@ package com.Elements
 			flag = true;
 		}
 		
-		private function GAME_OVER():void 
-		{
-			trace("3dd GameOver..")
+		private function GAME_OVER():void {
+			//trace("3dd GameOver..")
 			//dead = true;
 			//timer.stop();
 			/*while (base.rootContainer.numChildren)
-				this.removeChildAt(0);*/
+			this.removeChildAt(0);*/
 			//timer.removeEventListener(TimerEvent.TIMER,moveIt);
 			//stage.removeEventListener(KeyboardEvent.KEY_DOWN,directionChanged);
 			//init();
+		}
+		
+		public function placeApple(snake_vector:Vector.<Element>,caught:Boolean = true):void{
+			trace("dd5 placeApple")
+			if(apple == null){
+				apple = new Element(0xFF0000,1,brickSize, brickSize);
+				addChild(apple);
+			}
+			apple.catchValue = 0;
+			
+			if (caught)
+				apple.catchValue += 10;
+			
+			var boundsX:int = (Math.floor(BalaBase3d.ww / (snake_vector[0].width + space_value)))-1;
+			var randomX:Number = Math.floor(Math.random()*boundsX);
+			
+			var boundsY:int = (Math.floor(BalaBase3d.hh/(snake_vector[0].height + space_value)))-1;
+			var randomY:Number = Math.floor(Math.random()*boundsY);
+			
+			apple.x = randomX * (apple.width + space_value);
+			apple.y = randomY * (apple.height + space_value);
+			
+			for(var i:uint=0;i<snake_vector.length-1;i++){
+				if(snake_vector[i].x == apple.x && snake_vector[i].y == apple.y)
+					placeApple(snake_vector,false);
+			}
 		}
 		
 	}
