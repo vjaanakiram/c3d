@@ -51,7 +51,7 @@ package com.Elements
 			snake_vector = new Vector.<Element>;
 			markers_vector = new Vector.<Object>;
 			space_value = 2;
-			timer = new Timer(1500); //Every 50th millisecond, the moveIt() function will be fired!
+			timer = new Timer(700); //Every 50th millisecond, the moveIt() function will be fired!
 			dead = false;
 			min_elements = 1;
 			//apple = new Element(0xFF0000, 1,10, 10); //red, not transparent, width:10, height: 10;
@@ -114,9 +114,10 @@ package com.Elements
 		private function moveIt(e:TimerEvent):void{
 			if(apple && remoteSnake == false){
 				if (snake_vector[0].x == apple.x && snake_vector[0].y == apple.y){
-					//placeApple();
+					placeApple(snake_vector);
 					trace("3dd1 dispatching..I_GOT_FOOD");
 					dispatchEvent(new Event(MySnake.I_GOT_FOOD));
+					
 					//show the current Score
 					score += apple.catchValue;
 					score_tf.text = "Score:" + String(score);
@@ -179,7 +180,6 @@ package com.Elements
 				}
 				
 			}
-			
 			flag = true;
 		}
 		
@@ -211,8 +211,8 @@ package com.Elements
 			var boundsY:int = (Math.floor(BalaBase3d.hh/(snake_vector[0].height + space_value)))-1;
 			var randomY:Number = Math.floor(Math.random()*boundsY);
 			
-			apple.x = randomX * (apple.width + space_value);
-			apple.y = randomY * (apple.height + space_value);
+			apple.x = randomX * (brickSize + space_value);
+			apple.y = randomY * (brickSize + space_value);
 			
 			for(var i:uint=0;i<snake_vector.length-1;i++){
 				if(snake_vector[i].x == apple.x && snake_vector[i].y == apple.y)

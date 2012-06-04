@@ -112,7 +112,7 @@ package com.view
 		
 		private function addedNewSnakePart(e:Event):void{
 			trace("3dd addedNewSnakePart but not uploading..");
-			//uploadResources(mySnake.getResources(true));
+			uploadResources(mySnake.getResources(true));
 		}
 		
 		private function keyDownFun(e:KeyboardEvent):void{
