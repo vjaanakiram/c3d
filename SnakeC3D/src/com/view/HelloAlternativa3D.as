@@ -21,14 +21,12 @@ package com.view {
 	 * Создание простейшего трёхмерного приложения.
 	 */
 	public class HelloAlternativa3D extends Sprite {
-		
 		public var rootContainer:Object3D = new Object3D();
 		public var msgStr:String = "";
 		
 		public var camera:Camera3D;
 		public var stage3D:Stage3D;
-		
-		public var box:Box;
+		//public var box:Box;
 		
 		public function HelloAlternativa3D(ww:Number,hh:Number,scaleMode:Boolean) {
 			// Camera and view
@@ -46,11 +44,11 @@ package com.view {
 			rootContainer.addChild(camera);
 			// Primitive box
 			// Создание примитива
-			box = new Box(100, 100, 100,5, 5, 5);
-			var material:FillMaterial = new FillMaterial(0xFF7700);
-			box.setMaterialToAllSurfaces(material);
-			rootContainer.addChild(box);
-			box.y = 200;
+			//box = new Box(100, 100, 100,5, 5, 5);
+			//var material:FillMaterial = new FillMaterial(0xFF7700);
+			//box.setMaterialToAllSurfaces(material);
+			//rootContainer.addChild(box);
+			//box.y = 200;
 			
 			if(stage){
 				init();
@@ -80,10 +78,11 @@ package com.view {
 					+'\nso you can play 3d games!';
 			}
 			dispatchEvent(new Event(Cont3D.MSG));
+			//dispatchEvent(new Event("NS3D"));
 		}
 		
 		private function onContextCreate(e:Event):void {
-			dispatchEvent(new Event("BR"));
+			dispatchEvent(new Event("S3D"));
 			for each (var resource:Resource in rootContainer.getResources(true)) {
 				resource.upload(stage3D.context3D);
 			}
@@ -101,17 +100,17 @@ package com.view {
 			// Rotation
 			// Вращение примитива
 			//box.rotationZ -= 0.01;
-			if(box.x<=-400){
+			/*if(box.x<=-400){
 				ct = 5;
 			}else if(box.x >400){
 				ct = -5
 			}
-			box.x+=ct;
+			box.x+=ct;*/
 			//box.z+=ct;
 			
 			// Render
 			// Отрисовка
-			camera.render(stage3D);
+			//camera.render();
 		}
 		
 		// this error is fired if the swf is not using wmode=direct

@@ -12,16 +12,17 @@ package com.Elements
 		
 		public static const I_GOT_FOOD:String = "igotfood";
 		
-		public function MySnake(base3D:BalaBase3d){
-			super(false,base3D);
+		public function MySnake(){
+			super(false);
 			addEventListener(Event.ADDED_TO_STAGE,addedToStage);
 		}
 		
 		private function addedToStage(e:Event):void{
-			stage.addEventListener(KeyboardEvent.KEY_DOWN,directionChanged);
+			//stage.addEventListener(KeyboardEvent.KEY_DOWN,directionChanged);
 		}
 		
-		private function directionChanged(e:KeyboardEvent):void {
+		//stage3d needs to call
+		public function directionChanged(e:KeyboardEvent):void {
 			var m:Object = new Object(); //MARKER OBJECT
 			var directionChanged:Boolean = false;
 			if (e.keyCode == Keyboard.LEFT && last_button_down != e.keyCode && last_button_down != Keyboard.RIGHT && flag)
@@ -66,7 +67,7 @@ package com.Elements
 			if(directionChanged == true){
 				dispatchEvent(new CustomEvent(CustomEvent.MY_KEY_DATA_TO_SEND,playerData));
 			}
-			trace("dd2 markers_vector",markers_vector.length);
+			trace("3dd markers_vector of mysnake..",markers_vector.length);
 		}
 		
 		/*public function currentStatusOfMySnake(needFoodData:Boolean):String{

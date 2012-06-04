@@ -16,7 +16,7 @@ package com.Elements
 		
 		//color,alpha,width,height				
 		public function Element(_c:uint,_a:Number,_w:Number,_h:Number) {
-			super();
+			super(_w,_h,_h,4,4,4);
 			var material:FillMaterial = new FillMaterial(0xFF7700);
 			setMaterialToAllSurfaces(material);
 			/*graphics.lineStyle(0, _c, _a);

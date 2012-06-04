@@ -1,19 +1,24 @@
 package com.view
 {
 	import alternativa.engine3d.controllers.SimpleObjectController;
+	import alternativa.engine3d.core.Object3D;
+	import alternativa.engine3d.core.Resource;
 	import alternativa.engine3d.lights.AmbientLight;
 	import alternativa.engine3d.lights.DirectionalLight;
 	import alternativa.engine3d.materials.StandardMaterial;
 	import alternativa.engine3d.primitives.Box;
 	import alternativa.engine3d.primitives.Plane;
+	import alternativa.engine3d.resources.BitmapCubeTextureResource;
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	import alternativa.engine3d.shadows.DirectionalLightShadow;
 	
 	import com.Elements.MySnake;
+	import com.Elements.Snake;
 	import com.Utils3d.SpringCameraController;
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.geom.Vector3D;
 
 	public class BalaBase3d extends HelloAlternativa3D{
@@ -21,27 +26,31 @@ package com.view
 		//-locale en_US -use-network=false -swf-version=13
 		[Embed(source="/images/bark_diffuse.jpg")] private static const EmbedBarkDiffuse:Class;
 		[Embed(source="/images/bark_normal.jpg")] private static const EmbedBarkNormal:Class;
-		[Embed(source="/images/grass.jpg")] private static const EmbedGrassDiffuse:Class;
+		[Embed(source="/images/wood.jpg")] private static const EmbedGrassDiffuse:Class;
 		
 		private var controller:SimpleObjectController;
 		public var mySnake:MySnake;
-		public var ww:Number;
-		public var hh:Number;
+		public static var ww:Number;
+		public static var hh:Number;
 		
 		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
 			ww = _ww;
 			hh = _hh;
 			super(ww,hh,scaleMode);
-			super.addEventListener("BR",BReady);
+			//super.addEventListener("NS3D",noStage3D);
+			super.addEventListener("S3D",BReady);
 		}
 		
 		private function BReady(e:Event):void{
-			trace("bready...")
+			trace("3dd BReady...");
 			addElements();
+			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownFun);
 		}
 		private var cameraContoller:SpringCameraController
 		private function addElements():void{
-			mySnake = new MySnake(this);
+			mySnake = new MySnake();
+			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
+			rootContainer.addChild(mySnake);
 			controller = new SimpleObjectController(stage, camera, 200);
 			controller.mouseSensitivity = .01;
 			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
@@ -52,7 +61,6 @@ package com.view
 			
 			bark_diffuse.upload(stage3D.context3D);
 			bark_normal.upload(stage3D.context3D);
-			
 			var grassMaterial:StandardMaterial = new StandardMaterial(grass_diffuse, grass_normal);
 			grassMaterial.specularPower = 0.14;
 			var barkMaterial:StandardMaterial = new StandardMaterial(bark_diffuse, bark_normal);
@@ -68,6 +76,7 @@ package com.view
 			grass.geometry.upload(stage3D.context3D);
 			grass.setMaterialToAllSurfaces(grassMaterial);
 			rootContainer.addChild(grass);
+			uploadResources(mySnake.getResources(true));
 			
 			
 			// Light sources
@@ -84,7 +93,7 @@ package com.view
 			var shadow:DirectionalLightShadow = new DirectionalLightShadow(1000, 1000, -500, 500, 512, 2);
 			shadow.biasMultiplier = 0.97;
 			shadow.addCaster(platform);
-			shadow.addCaster(box);
+			//shadow.addCaster(box);
 			directionalLight.shadow = shadow;
 			
 			cameraContoller = new SpringCameraController(this,camera,100);
@@ -99,10 +108,27 @@ package com.view
 			cameraContoller.lookOffset = new Vector3D(0, 0, 0);
 		}
 		
+		private function addedNewSnakePart(e:Event):void{
+			trace("3dd addedNewSnakePart but not uploading..");
+			//uploadResources(mySnake.getResources(true));
+		}
+		
+		private function keyDownFun(e:KeyboardEvent):void{
+			trace("3dd keyDownFun")
+			mySnake.directionChanged(e);
+		}
+		
+		private function uploadResources(resources:Vector.<Resource>):void {
+			for each (var resource:Resource in resources) {
+				resource.upload(stage3D.context3D);
+			}
+		}
+		
 		public override function onEnterFrame(e:Event=null):void{
 			super.onEnterFrame();
 			//cameraContoller.update();
 			controller.update();
+			camera.render(stage3D);
 		}
 	}
 }
