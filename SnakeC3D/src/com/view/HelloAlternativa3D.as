@@ -94,23 +94,8 @@ package com.view {
 		public function onEnterFrame(e:Event=null):void {
 			// Width and height of view
 			// Установка ширины и высоты вьюпорта
-			camera.view.width = stage.stageWidth;
-			camera.view.height = stage.stageHeight;
-			
-			// Rotation
-			// Вращение примитива
-			//box.rotationZ -= 0.01;
-			/*if(box.x<=-400){
-				ct = 5;
-			}else if(box.x >400){
-				ct = -5
-			}
-			box.x+=ct;*/
-			//box.z+=ct;
-			
-			// Render
-			// Отрисовка
-			//camera.render();
+			//camera.view.width = stage.stageWidth;
+			//camera.view.height = stage.stageHeight;
 		}
 		
 		// this error is fired if the swf is not using wmode=direct

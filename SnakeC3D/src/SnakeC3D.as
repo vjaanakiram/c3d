@@ -19,8 +19,8 @@ package{
 		private var titlescreenTf:TextField = new TextField();
 		public function SnakeC3D(){
 			var bg:Bitmap = new AssetClass();
-			addChild(bg);
-			balaBase = new BalaBase3d(100,100,true);
+			//addChild(bg);
+			balaBase = new BalaBase3d(500,500,true);
 			balaBase.addEventListener(Cont3D.MSG,gotMsg);
 			addChild(balaBase);
 			balaBase.x = 50;

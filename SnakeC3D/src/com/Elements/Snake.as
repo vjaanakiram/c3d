@@ -27,7 +27,7 @@ package com.Elements
 		public var timer:Timer;//for sync to Remote Time on Board
 		private var dead:Boolean;
 		private var min_elements:int; //holds how many parts should the snake have at the beginning
-		private var apple:Element; //Our apple
+		public var apple:Element; //Our apple
 		private var space_value:Number; //space between the snake parts
 		public var last_button_down:uint; //the keyCode of the last button pressed to any snake (bala)
 		public var flag:Boolean; //is it allowed to change direction? bala
@@ -38,6 +38,7 @@ package com.Elements
 		private var brickSize:Number = 15;
 		//private var base:BalaBase3d;
 		public static const ADDED_PART:String = "addedsnakepart";
+		public var head:Element;
 		
 		public function Snake(_remoteSnake:Boolean) {
 			//base = _base;
@@ -50,8 +51,8 @@ package com.Elements
 		private function init(e:Event = null):void{
 			snake_vector = new Vector.<Element>;
 			markers_vector = new Vector.<Object>;
-			space_value = 2;
-			timer = new Timer(700); //Every 50th millisecond, the moveIt() function will be fired!
+			space_value = 0;
+			timer = new Timer(40); //Every 50th millisecond, the moveIt() function will be fired!
 			dead = false;
 			min_elements = 1;
 			//apple = new Element(0xFF0000, 1,10, 10); //red, not transparent, width:10, height: 10;
@@ -64,6 +65,7 @@ package com.Elements
 			//Create the first <min_elements> Snake parts
 			for(var i:int=0;i<min_elements;++i){
 				snake_vector[i] = new Element(0x00AAFF,1,brickSize,brickSize);
+				head = snake_vector[i];
 				//snake_vector[i].rotationZ = Math.random()*45;
 				snake_vector[i].direction = "R"; //The starting direction of the snake
 				if (i == 0){

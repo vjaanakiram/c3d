@@ -6,6 +6,8 @@ package com.view
 	import alternativa.engine3d.lights.AmbientLight;
 	import alternativa.engine3d.lights.DirectionalLight;
 	import alternativa.engine3d.materials.StandardMaterial;
+	import alternativa.engine3d.materials.TextureMaterial;
+	import alternativa.engine3d.objects.SkyBox;
 	import alternativa.engine3d.primitives.Box;
 	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.BitmapCubeTextureResource;
@@ -20,6 +22,7 @@ package com.view
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Vector3D;
+	import flash.media.Camera;
 
 	public class BalaBase3d extends HelloAlternativa3D{
 		// params.wmode="direct" //bala
@@ -28,7 +31,23 @@ package com.view
 		[Embed(source="/images/bark_normal.jpg")] private static const EmbedBarkNormal:Class;
 		[Embed(source="/images/wood.jpg")] private static const EmbedGrassDiffuse:Class;
 		
+		
+		[Embed(source = "/images/left.jpg")] static private const left_t_c:Class;
+		private var left_t:BitmapTextureResource = new BitmapTextureResource(new left_t_c().bitmapData);
+		[Embed(source = "/images/right.jpg")] static private const right_t_c:Class;
+		private var right_t:BitmapTextureResource = new BitmapTextureResource(new right_t_c().bitmapData);
+		[Embed(source = "/images/top.jpg")] static private const top_t_c:Class;
+		private var top_t:BitmapTextureResource = new BitmapTextureResource(new top_t_c().bitmapData);
+		[Embed(source = "/images/bottom.jpg")] static private const bottom_t_c:Class;
+		private var bottom_t:BitmapTextureResource = new BitmapTextureResource(new bottom_t_c().bitmapData);
+		[Embed(source = "/images/front.jpg")] static private const front_t_c:Class;
+		private var front_t:BitmapTextureResource = new BitmapTextureResource(new front_t_c().bitmapData);
+		[Embed(source = "/images/back.jpg")] static private const back_t_c:Class;
+		private var back_t:BitmapTextureResource = new BitmapTextureResource(new back_t_c().bitmapData);
+		
 		private var controller:SimpleObjectController;
+		private var cameraContoller:SpringCameraController;
+		public var skyBox:SkyBox;
 		public var mySnake:MySnake;
 		public static var ww:Number;
 		public static var hh:Number;
@@ -43,16 +62,29 @@ package com.view
 		
 		private function BReady(e:Event):void{
 			trace("3dd BReady...");
+			addSky();
 			addElements();
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownFun);
+		}
+		
+		private function addSky():void{
+			skyBox = new SkyBox(3000, 
+				new TextureMaterial(left_t), 
+				new TextureMaterial(right_t), 
+				new TextureMaterial(back_t), 
+				new TextureMaterial(front_t), 
+				new TextureMaterial(bottom_t), 
+				new TextureMaterial(top_t), 0.01);
+			rootContainer.addChild(skyBox);
 		}
 		//private var cameraContoller:SpringCameraController
 		private function addElements():void{
 			mySnake = new MySnake();
 			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
 			rootContainer.addChild(mySnake);
-			controller = new SimpleObjectController(stage, camera, 200);
-			controller.mouseSensitivity = .01;
+			controller = new SimpleObjectController(stage, camera,100);
+			//controller.mouseSensitivity = .01;
+			controller.lookAtXYZ(0,0,0);
 			controller.unbindAll();
 			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
 			var grass_normal:BitmapTextureResource = new BitmapTextureResource(new BitmapData(1, 1, false, 0x7F7FFF));
@@ -73,10 +105,11 @@ package com.view
 			platform.z = 25;
 			//rootContainer.addChild(platform);
 			
-			var grass:Plane = new Plane(900, 900);
+			var grass:Plane = new Plane(900, 900);//______________________________
 			grass.geometry.upload(stage3D.context3D);
 			grass.setMaterialToAllSurfaces(grassMaterial);
-			rootContainer.addChild(grass);
+			//rootContainer.addChild(grass);
+			grass.z = -5;
 			uploadResources(mySnake.getResources(true));
 			
 			
@@ -94,24 +127,23 @@ package com.view
 			var shadow:DirectionalLightShadow = new DirectionalLightShadow(1000, 1000, -500, 500, 512, 2);
 			shadow.biasMultiplier = 0.97;
 			shadow.addCaster(platform);
-			//shadow.addCaster(box);
+			shadow.addCaster(mySnake.head);
 			directionalLight.shadow = shadow;
 			
+			//camera.fov=100*Math.PI/180;
 			
-			//cameraContoller.target=box;
-			
-			camera.fov=100*Math.PI/180;
 			
 			//cameraContoller = new SpringCameraController(this,camera,100);
-			//cameraContoller.mass = 30;
-			//cameraContoller.damping = 30;
+			//cameraContoller.target = mySnake.apple;
+			//cameraContoller.mass = 3;
+			//cameraContoller.damping = 3;
 			//cameraContoller.stiffness = 1;
-			//cameraContoller.positionOffset = new Vector3D(50, 200, 100);
+			//cameraContoller.positionOffset = new Vector3D(0, 60, 60);
 			//cameraContoller.lookOffset = new Vector3D(0, 0, 0);
 		}
 		
 		private function addedNewSnakePart(e:Event):void{
-			trace("3dd addedNewSnakePart but not uploading..");
+			trace("3dd addedNewSnakePart uploading..");
 			uploadResources(mySnake.getResources(true));
 		}
 		
@@ -129,7 +161,12 @@ package com.view
 		public override function onEnterFrame(e:Event=null):void{
 			super.onEnterFrame();
 			//cameraContoller.update();
-			controller.update();
+			//trace("3dd1 snake headpos",mySnake.head.x)
+			//controller.lookAtXYZ(mySnake.head.x,mySnake.head.y,mySnake.head.z);
+			//controller.update();
+			camera.x = mySnake.head.x + Math.sin(mySnake.head.rotationZ)*100;
+			camera.y = mySnake.head.y + Math.cos(mySnake.head.rotationZ)*100;
+			camera.rotationZ = mySnake.head.rotationZ+Math.PI; // Math.PI = 180 deg
 			camera.render(stage3D);
 		}
 	}
