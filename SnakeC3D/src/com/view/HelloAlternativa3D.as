@@ -50,6 +50,8 @@ package com.view {
 			//rootContainer.addChild(box);
 			//box.y = 200;
 			
+			
+			
 			if(stage){
 				init();
 			}else{

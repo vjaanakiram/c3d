@@ -1,12 +1,18 @@
 package com.Elements 
 {
 	import alternativa.engine3d.materials.FillMaterial;
+	import alternativa.engine3d.materials.VertexLightTextureMaterial;
 	import alternativa.engine3d.primitives.Box;
+	import alternativa.engine3d.resources.BitmapTextureResource;
+	import alternativa.engine3d.resources.TextureResource;
 	
 	import flash.display.Shape;
 	
 	public class Element extends Box
 	{
+		[Embed(source = "/images/wood.jpg")] static private const left_t_c:Class;
+		private var snakeTxtr:BitmapTextureResource = new BitmapTextureResource(new left_t_c().bitmapData);
+		
 		protected var _direction:String;
 		//IF IT IS AN APPLE ->
 		protected var _catchValue:Number;
@@ -19,8 +25,10 @@ package com.Elements
 			width = _w;
 			height = _h;
 			super(_w,_h,_h,4,4,4);
-			var material:FillMaterial = new FillMaterial(_c);
-			setMaterialToAllSurfaces(material);
+			//var material:FillMaterial = new FillMaterial(_c);
+			var vertexLights:VertexLightTextureMaterial = new VertexLightTextureMaterial(snakeTxtr);
+			setMaterialToAllSurfaces(vertexLights);
+			
 			/*graphics.lineStyle(0, _c, _a);
 			graphics.beginFill(_c, _a);
 			graphics.drawRect(0, 0, _w, _h);

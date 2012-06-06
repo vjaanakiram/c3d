@@ -5,6 +5,8 @@ package com.view
 	import alternativa.engine3d.core.Resource;
 	import alternativa.engine3d.lights.AmbientLight;
 	import alternativa.engine3d.lights.DirectionalLight;
+	import alternativa.engine3d.lights.OmniLight;
+	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.materials.StandardMaterial;
 	import alternativa.engine3d.materials.TextureMaterial;
 	import alternativa.engine3d.objects.SkyBox;
@@ -32,17 +34,17 @@ package com.view
 		[Embed(source="/images/wood.jpg")] private static const EmbedGrassDiffuse:Class;
 		
 		
-		[Embed(source = "/images/left.jpg")] static private const left_t_c:Class;
+		[Embed(source = "/images/skybox/left.jpg")] static private const left_t_c:Class;
 		private var left_t:BitmapTextureResource = new BitmapTextureResource(new left_t_c().bitmapData);
-		[Embed(source = "/images/right.jpg")] static private const right_t_c:Class;
+		[Embed(source = "/images/skybox/right.jpg")] static private const right_t_c:Class;
 		private var right_t:BitmapTextureResource = new BitmapTextureResource(new right_t_c().bitmapData);
-		[Embed(source = "/images/top.jpg")] static private const top_t_c:Class;
+		[Embed(source = "/images/skybox/top.jpg")] static private const top_t_c:Class;
 		private var top_t:BitmapTextureResource = new BitmapTextureResource(new top_t_c().bitmapData);
-		[Embed(source = "/images/bottom.jpg")] static private const bottom_t_c:Class;
+		[Embed(source = "/images/skybox/bottom.jpg")] static private const bottom_t_c:Class;
 		private var bottom_t:BitmapTextureResource = new BitmapTextureResource(new bottom_t_c().bitmapData);
-		[Embed(source = "/images/front.jpg")] static private const front_t_c:Class;
+		[Embed(source = "/images/skybox/front.jpg")] static private const front_t_c:Class;
 		private var front_t:BitmapTextureResource = new BitmapTextureResource(new front_t_c().bitmapData);
-		[Embed(source = "/images/back.jpg")] static private const back_t_c:Class;
+		[Embed(source = "/images/skybox/back.jpg")] static private const back_t_c:Class;
 		private var back_t:BitmapTextureResource = new BitmapTextureResource(new back_t_c().bitmapData);
 		
 		private var controller:SimpleObjectController;
@@ -96,7 +98,7 @@ package com.view
 			bark_diffuse.upload(stage3D.context3D);
 			bark_normal.upload(stage3D.context3D);
 			var grassMaterial:StandardMaterial = new StandardMaterial(grass_diffuse, grass_normal);
-			grassMaterial.specularPower = 0.14;
+			grassMaterial.specularPower = 0.24;
 			var barkMaterial:StandardMaterial = new StandardMaterial(bark_diffuse, bark_normal);
 			barkMaterial.specularPower = .4
 				
@@ -106,18 +108,28 @@ package com.view
 			platform.z = 25;
 			//rootContainer.addChild(platform);
 			
-			var grass:Plane = new Plane(900, 900);//______________________________
+			var grass:Plane = new Plane(900, 900,10,10);//______________________________
 			grass.geometry.upload(stage3D.context3D);
-			grass.setMaterialToAllSurfaces(grassMaterial);
-			//rootContainer.addChild(grass);
+			
+			grass.setMaterialToAllSurfaces(new FillMaterial(0xcccccc,0.7));
+			//grass.setMaterialToAllSurfaces(grassMaterial);
+			rootContainer.addChild(grass);
 			grass.z = -5;
 			uploadResources(mySnake.getResources(true));
 			
 			
 			// Light sources
 			// Источники света
-			var ambientLight:AmbientLight = new AmbientLight(0x333333);
+			var ambientLight:AmbientLight = new AmbientLight(0xFF0f0F0f);
+			ambientLight.visible = true;
 			rootContainer.addChild(ambientLight);
+			var light:OmniLight = new OmniLight(0xffff0000,500,1200);
+			//light.intensity = 1000;
+			light.x =-400
+			// light.y = -40
+			light.z = -400;
+			rootContainer.addChild(light);
+			
 			var directionalLight:DirectionalLight = new DirectionalLight(0xFFFF99);
 			directionalLight.lookAt(-0.5, -1, -1);
 			rootContainer.addChild(directionalLight);
