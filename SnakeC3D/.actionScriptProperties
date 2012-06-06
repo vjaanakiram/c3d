@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties mainApplicationPath="SnakeC3D.as" projectUUID="cdb2298d-6864-4006-8131-75269b8990e4" version="6">
-  <compiler additionalCompilerArguments="-locale en_US -use-network=false -swf-version=13" autoRSLOrdering="true" copyDependentFiles="true" flexSDK="Flex 4.6.0" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale en_US -use-network=false -swf-version=13" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -26,11 +26,11 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="D:/Bala/Balu_Src/Alternativa3D.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="D:/Bala/Example5/kukka/RemoteLib/bin/RemoteLib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="D:/Bala/Balu_Src/greensock.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="CarWithFollowCamera.as"/>
     <application path="SnakeC3D.as"/>
   </applications>
   <modules/>

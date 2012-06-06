@@ -6,6 +6,7 @@ package com.view {
 	import alternativa.engine3d.core.View;
 	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.primitives.Box;
+	import alternativa.engine3d.primitives.GeoSphere;
 	
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
@@ -50,7 +51,8 @@ package com.view {
 			//rootContainer.addChild(box);
 			//box.y = 200;
 			
-			
+			var centerPoint:GeoSphere = new GeoSphere(10,4,false,new FillMaterial(0xff0000,.5));
+			rootContainer.addChild(centerPoint);
 			
 			if(stage){
 				init();

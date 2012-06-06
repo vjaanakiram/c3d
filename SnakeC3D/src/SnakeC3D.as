@@ -14,6 +14,7 @@ package{
 		[Embed(source="/images/Desert.jpg")]
 		private var AssetClass:Class;
 		//public class SnakeC3D extends Sprite{
+		//params.wmode="direct" //bala
 		private var balaBase:BalaBase3d;
 		// used to politely tell users about problems
 		private var titlescreenTf:TextField = new TextField();

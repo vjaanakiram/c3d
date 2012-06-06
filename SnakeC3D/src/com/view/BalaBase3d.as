@@ -19,13 +19,16 @@ package com.view
 	import com.Elements.MySnake;
 	import com.Elements.Snake;
 	import com.Utils3d.SpringCameraController;
+	import com.greensock.*;
+	import com.greensock.easing.*;
 	
 	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Vector3D;
 	import flash.media.Camera;
-
+	import flash.ui.Keyboard;
+	
 	public class BalaBase3d extends HelloAlternativa3D{
 		// params.wmode="direct" //bala
 		//-locale en_US -use-network=false -swf-version=13
@@ -49,11 +52,12 @@ package com.view
 		
 		private var controller:SimpleObjectController;
 		private var cameraContoller:SpringCameraController;
+		private var  directionalLight:DirectionalLight;
 		public var skyBox:SkyBox;
 		public var mySnake:MySnake;
 		public static var ww:Number;
 		public static var hh:Number;
-		private var cameraDistance:Number = -200;
+		public var cameraDistance:Number = -200;
 		
 		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
 			ww = _ww;
@@ -101,7 +105,7 @@ package com.view
 			grassMaterial.specularPower = 0.24;
 			var barkMaterial:StandardMaterial = new StandardMaterial(bark_diffuse, bark_normal);
 			barkMaterial.specularPower = .4
-				
+			
 			var platform:Box = new Box(300, 300, 50);
 			platform.geometry.upload(stage3D.context3D);
 			platform.setMaterialToAllSurfaces(barkMaterial);
@@ -130,7 +134,7 @@ package com.view
 			light.z = -400;
 			rootContainer.addChild(light);
 			
-			var directionalLight:DirectionalLight = new DirectionalLight(0xFFFF99);
+			directionalLight = new DirectionalLight(0xFFFF99);
 			directionalLight.lookAt(-0.5, -1, -1);
 			rootContainer.addChild(directionalLight);
 			
@@ -159,9 +163,19 @@ package com.view
 			trace("3dd addedNewSnakePart uploading..");
 			uploadResources(mySnake.getResources(true));
 		}
-		
+		private var twn:TweenLite = new TweenLite(this,3,{cameraDistance:-600, ease:Linear.easeNone});
 		private function keyDownFun(e:KeyboardEvent):void{
 			trace("3dd keyDownFun")
+			if (e.keyCode == Keyboard.DOWN){
+				//cameraDistance = -600;
+				//twn.restart();
+				//TweenLite.to(this, 2, {cameraDistance:-600, ease:Linear.easeNone}); //onUpdate:showScore
+				//cameraDistance = cameraDistance
+			}else if(e.keyCode == Keyboard.UP){
+				//cameraDistance = -200;
+				//twn.reverse();
+				//TweenLite.to(this, 2, {cameraDistance:-200, ease:Linear.easeNone});
+			}
 			mySnake.directionChanged(e);
 		}
 		
@@ -173,6 +187,7 @@ package com.view
 		
 		public override function onEnterFrame(e:Event=null):void{
 			super.onEnterFrame();
+			//directionalLight.lookAt(mySnake.apple.x,mySnake.apple.y,-10);
 			//cameraContoller.update();
 			//trace("3dd1 snake headpos",mySnake.head.x)
 			//controller.lookAtXYZ(mySnake.head.x,mySnake.head.y,mySnake.head.z);

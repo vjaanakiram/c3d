@@ -10,7 +10,7 @@ package com.Elements
 	
 	public class Element extends Box
 	{
-		[Embed(source = "/images/wood.jpg")] static private const left_t_c:Class;
+		[Embed(source = "/images/mysnkeTxtr.jpg")] static private const left_t_c:Class;
 		private var snakeTxtr:BitmapTextureResource = new BitmapTextureResource(new left_t_c().bitmapData);
 		
 		protected var _direction:String;

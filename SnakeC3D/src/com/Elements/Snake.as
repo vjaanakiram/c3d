@@ -35,7 +35,7 @@ package com.Elements
 		private var score_tf:TextField; //the Textfield showing the score
 		private var remoteSnake:Boolean;
 		public var playerData:PlayerDataVO = new PlayerDataVO();
-		private var brickSize:Number = 15;
+		private var brickSize:Number = 50;
 		//private var base:BalaBase3d;
 		public static const ADDED_PART:String = "addedsnakepart";
 		public var head:Element;
@@ -52,7 +52,7 @@ package com.Elements
 			snake_vector = new Vector.<Element>;
 			markers_vector = new Vector.<Object>;
 			space_value = 0;
-			timer = new Timer(40); //Every 50th millisecond, the moveIt() function will be fired!
+			timer = new Timer(90); //Every 50th millisecond, the moveIt() function will be fired!
 			dead = false;
 			min_elements = 1;
 			//apple = new Element(0xFF0000, 1,10, 10); //red, not transparent, width:10, height: 10;
