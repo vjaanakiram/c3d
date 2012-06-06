@@ -51,6 +51,7 @@ package com.view
 		public var mySnake:MySnake;
 		public static var ww:Number;
 		public static var hh:Number;
+		private var cameraDistance:Number = -200;
 		
 		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
 			ww = _ww;
@@ -164,9 +165,9 @@ package com.view
 			//trace("3dd1 snake headpos",mySnake.head.x)
 			//controller.lookAtXYZ(mySnake.head.x,mySnake.head.y,mySnake.head.z);
 			//controller.update();
-			camera.x = mySnake.head.x + Math.sin(mySnake.head.rotationZ)*100;
-			camera.y = mySnake.head.y + Math.cos(mySnake.head.rotationZ)*100;
-			camera.rotationZ = mySnake.head.rotationZ+Math.PI; // Math.PI = 180 deg
+			camera.x = mySnake.head.x + Math.sin(mySnake.head.rotationZ)*cameraDistance;
+			camera.y = mySnake.head.y + Math.cos(mySnake.head.rotationZ)*cameraDistance;
+			//camera.rotationZ = mySnake.head.rotationZ+Math.PI; // Math.PI = 180 deg
 			camera.render(stage3D);
 		}
 	}
