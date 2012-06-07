@@ -57,7 +57,7 @@ package com.view
 		public var mySnake:MySnake;
 		public static var ww:Number;
 		public static var hh:Number;
-		public var cameraDistance:Number = -200;
+		public var cameraDistance:Number = -300;
 		
 		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
 			ww = _ww;
@@ -126,13 +126,14 @@ package com.view
 			// Источники света
 			var ambientLight:AmbientLight = new AmbientLight(0xFF0f0F0f);
 			ambientLight.visible = true;
-			rootContainer.addChild(ambientLight);
-			var light:OmniLight = new OmniLight(0xffff0000,500,1200);
-			//light.intensity = 1000;
-			light.x =-400
+			//rootContainer.addChild(ambientLight);
+			var light:OmniLight = new OmniLight(0x0000ff,500,1200);
+			light.visible = true
+			light.intensity = 1000;
+			//light.x =-400
 			// light.y = -40
-			light.z = -400;
-			rootContainer.addChild(light);
+			light.z = 400;
+			//rootContainer.addChild(light);
 			
 			directionalLight = new DirectionalLight(0xFFFF99);
 			directionalLight.lookAt(-0.5, -1, -1);
@@ -163,18 +164,20 @@ package com.view
 			trace("3dd addedNewSnakePart uploading..");
 			uploadResources(mySnake.getResources(true));
 		}
-		private var twn:TweenLite = new TweenLite(this,3,{cameraDistance:-600, ease:Linear.easeNone});
+		//private var twn:TweenLite = new TweenLite(this,3,{cameraDistance:-600, ease:Linear.easeNone});
 		private function keyDownFun(e:KeyboardEvent):void{
 			trace("3dd keyDownFun")
 			if (e.keyCode == Keyboard.DOWN){
 				//cameraDistance = -600;
 				//twn.restart();
-				//TweenLite.to(this, 2, {cameraDistance:-600, ease:Linear.easeNone}); //onUpdate:showScore
+				TweenLite.killTweensOf(this);
+				TweenLite.to(this, 6, {cameraDistance:-500, ease:Linear.easeNone}); //onUpdate:showScore
 				//cameraDistance = cameraDistance
 			}else if(e.keyCode == Keyboard.UP){
 				//cameraDistance = -200;
 				//twn.reverse();
-				//TweenLite.to(this, 2, {cameraDistance:-200, ease:Linear.easeNone});
+				TweenLite.killTweensOf(this);
+				TweenLite.to(this, 6, {cameraDistance:-300, ease:Linear.easeNone});
 			}
 			mySnake.directionChanged(e);
 		}
