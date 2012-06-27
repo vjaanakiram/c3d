@@ -24,7 +24,7 @@ package com.view {
 	public class HelloAlternativa3D extends Sprite {
 		public var rootContainer:Object3D = new Object3D();
 		public var msgStr:String = "";
-		
+		public var cameraContainer:Object3D = new Object3D();
 		public var camera:Camera3D;
 		public var stage3D:Stage3D;
 		//public var box:Box;
@@ -42,7 +42,8 @@ package com.view {
 			camera.rotationX = -120*Math.PI/180;
 			camera.y = -600;
 			camera.z = 300;
-			rootContainer.addChild(camera);
+			cameraContainer.addChild(camera);  //bala for orbit cam rotation
+			rootContainer.addChild(cameraContainer);
 			// Primitive box
 			// Создание примитива
 			//box = new Box(100, 100, 100,5, 5, 5);

@@ -6,9 +6,12 @@ package com.view
 	import alternativa.engine3d.lights.AmbientLight;
 	import alternativa.engine3d.lights.DirectionalLight;
 	import alternativa.engine3d.lights.OmniLight;
+	import alternativa.engine3d.loaders.ParserA3D;
+	import alternativa.engine3d.loaders.ParserCollada;
 	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.materials.StandardMaterial;
 	import alternativa.engine3d.materials.TextureMaterial;
+	import alternativa.engine3d.objects.Mesh;
 	import alternativa.engine3d.objects.SkyBox;
 	import alternativa.engine3d.primitives.Box;
 	import alternativa.engine3d.primitives.Plane;
@@ -27,11 +30,20 @@ package com.view
 	import flash.events.KeyboardEvent;
 	import flash.geom.Vector3D;
 	import flash.media.Camera;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
 	import flash.ui.Keyboard;
 	
 	public class BalaBase3d extends HelloAlternativa3D{
 		// params.wmode="direct" //bala
 		//-locale en_US -use-network=false -swf-version=13
+		
+		//i think you need to clean all your stagged files using  or git rm --cached config/database.yml
+		//git rm -r --cached .
+		//git add .
+		//but make sure you commit your changes before doing this .
+		
 		[Embed(source="/images/bark_diffuse.jpg")] private static const EmbedBarkDiffuse:Class;
 		[Embed(source="/images/bark_normal.jpg")] private static const EmbedBarkNormal:Class;
 		[Embed(source="/images/wood.jpg")] private static const EmbedGrassDiffuse:Class;
@@ -50,8 +62,12 @@ package com.view
 		[Embed(source = "/images/skybox/back.jpg")] static private const back_t_c:Class;
 		private var back_t:BitmapTextureResource = new BitmapTextureResource(new back_t_c().bitmapData);
 		
+		//BAla collada..
+		[Embed(source="/images/Bala1.dae", mimeType="application/octet-stream")]
+		protected var bmodel:Class;
+		
 		private var controller:SimpleObjectController;
-		private var cameraContoller:SpringCameraController;
+		//private var cameraContoller:SpringCameraController;
 		private var  directionalLight:DirectionalLight;
 		public var skyBox:SkyBox;
 		public var mySnake:MySnake;
@@ -59,19 +75,67 @@ package com.view
 		public static var hh:Number;
 		public var cameraDistance:Number = -300;
 		
+		private var bxml:XML;
+		private var bparser:ParserCollada = new ParserCollada();
+		
 		public function BalaBase3d(_ww:Number,_hh:Number,scaleMode:Boolean){
 			ww = _ww;
 			hh = _hh;
 			super(ww,hh,scaleMode);
 			//super.addEventListener("NS3D",noStage3D);
 			super.addEventListener("S3D",BReady);
+			bxml = new XML(new bmodel());
 		}
 		
 		private function BReady(e:Event):void{
 			trace("3dd BReady...");
 			addSky();
+			//myCollada();
 			addElements();
+			controller = new SimpleObjectController(stage, cameraContainer,100);
+			//controller.mouseSensitivity = .01;
+			controller.lookAtXYZ(0,0,0);
+			//controller.unbindAll();
+			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownFun);
+		}
+		
+		private function myCollada():void{
+			bparser.parse(bxml);
+			var dog:Mesh;
+			var myObj:Object3D = new Object3D();
+			// itarate all objects
+			for (var i:int = 0; i < bparser.objects.length; i++) {
+				if (bparser.objects[i]) {
+					// if object is not null, then get it
+					if (bparser.objects[i] is Mesh) {
+						trace(" got myModel is Mesh",bparser.objects[i])
+						dog = bparser.objects[i] as Mesh;
+						// set material
+						//dog.setMaterialToAllSurfaces(new TextureMaterial(new BitmapTextureResource(new;
+						dog.setMaterialToAllSurfaces(new FillMaterial());
+						//rootContainer.addChild(dog);
+					}
+				}
+			}
+			// add to container
+			//rootContainer.addChild(dog);
+			// upload resources to context
+			for each (var dogResource:Resource in dog.getResources()) {
+				trace(" got myModel dogResource",dogResource)
+				if(dogResource is Mesh){
+					Mesh(dogResource).setMaterialToAllSurfaces(new left_t_c().bitmapData);
+				}
+				dogResource.upload(stage3D.context3D);
+			}
+			
+			for each (var child:Object3D in bparser.hierarchy){
+				if(child is Mesh){
+					Mesh(child).setMaterialToAllSurfaces(new FillMaterial(0xff0000));
+				}
+				myObj.addChild(child);
+			}
+			//rootContainer.addChild(myObj);
 		}
 		
 		private function addSky():void{
@@ -84,15 +148,11 @@ package com.view
 				new TextureMaterial(top_t), 0.01);
 			rootContainer.addChild(skyBox);
 		}
-		//private var cameraContoller:SpringCameraController
+		
 		private function addElements():void{
 			mySnake = new MySnake();
 			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
 			rootContainer.addChild(mySnake);
-			controller = new SimpleObjectController(stage, camera,100);
-			//controller.mouseSensitivity = .01;
-			controller.lookAtXYZ(0,0,0);
-			controller.unbindAll();
 			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
 			var grass_normal:BitmapTextureResource = new BitmapTextureResource(new BitmapData(1, 1, false, 0x7F7FFF));
 			
@@ -115,8 +175,8 @@ package com.view
 			var grass:Plane = new Plane(900, 900,10,10);//______________________________
 			grass.geometry.upload(stage3D.context3D);
 			
-			grass.setMaterialToAllSurfaces(new FillMaterial(0xcccccc,0.7));
-			//grass.setMaterialToAllSurfaces(grassMaterial);
+			//grass.setMaterialToAllSurfaces(new FillMaterial(0xcccccc));
+			grass.setMaterialToAllSurfaces(grassMaterial);
 			rootContainer.addChild(grass);
 			grass.z = -5;
 			uploadResources(mySnake.getResources(true));
@@ -158,6 +218,7 @@ package com.view
 			//cameraContoller.stiffness = 1;
 			//cameraContoller.positionOffset = new Vector3D(0, 60, 60);
 			//cameraContoller.lookOffset = new Vector3D(0, 0, 0);
+			//loadExternal();
 		}
 		
 		private function addedNewSnakePart(e:Event):void{
@@ -188,15 +249,42 @@ package com.view
 			}
 		}
 		
+		private function loadExternal():void{
+			var loaderA3D:URLLoader = new URLLoader(); //create a URLLoader
+			loaderA3D.dataFormat = URLLoaderDataFormat.BINARY; //indicate that the content was loaded as a byte array, not as a text
+			loaderA3D.load(new URLRequest("myExpo.a3d"));
+			loaderA3D.addEventListener(Event.COMPLETE, onA3DLoad); //end load
+		}
+		private var myModel:Mesh;
+		private function onA3DLoad(e:Event):void {
+			trace("myModel BINARY.. loaded")
+			var parser:ParserA3D = new ParserA3D(); //create a parser
+			parser.parse((e.target as URLLoader).data); //parse model
+			
+			myModel = new Mesh();
+			rootContainer.addChild(myModel); //add to the main container
+			for each(var obj:Object3D in parser.objects){
+				trace("3dd2 myObjs",obj);
+				if (obj is Mesh){
+					var mesh:Mesh = Mesh(obj); //transform in Mesh
+					myModel.addChild(mesh);
+				}
+			}
+			
+			for each (var resource:Resource in rootContainer.getResources(true)){
+				resource.upload(stage3D.context3D);
+			} 
+		}
+		
 		public override function onEnterFrame(e:Event=null):void{
 			super.onEnterFrame();
 			//directionalLight.lookAt(mySnake.apple.x,mySnake.apple.y,-10);
 			//cameraContoller.update();
 			//trace("3dd1 snake headpos",mySnake.head.x)
 			//controller.lookAtXYZ(mySnake.head.x,mySnake.head.y,mySnake.head.z);
-			//controller.update();
-			camera.x = mySnake.head.x + Math.sin(mySnake.head.rotationZ)*cameraDistance;
-			camera.y = mySnake.head.y + Math.cos(mySnake.head.rotationZ)*cameraDistance;
+			controller.update();
+			//camera.x = mySnake.head.x + Math.sin(mySnake.head.rotationZ)*cameraDistance;
+			//camera.y = mySnake.head.y + Math.cos(mySnake.head.rotationZ)*cameraDistance;
 			//camera.rotationZ = mySnake.head.rotationZ+Math.PI; // Math.PI = 180 deg
 			camera.render(stage3D);
 		}

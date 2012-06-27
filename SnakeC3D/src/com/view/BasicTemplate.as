@@ -16,7 +16,7 @@ package com.view
 		private var _viewHeight:int;
 		private var _scaleToStage:Boolean;
 		public var rootContainer:Object3D = new Object3D();
-		
+		public var cameraContainer:Object3D = new Object3D();
 		public var cam:Camera3D;
 		
 		/**
@@ -35,11 +35,11 @@ package com.view
 			addChild(cam.diagram);
 			
 			// Initial position
-			// Установка положения камеры
 			cam.rotationX = -120*Math.PI/180;
 			cam.y = -800;
 			cam.z = 200;
-			rootContainer.addChild(cam);
+			cameraContainer.addChild(cam);
+			rootContainer.addChild(cameraContainer);
 			
 			// stage
 			if (stage) init();
@@ -58,9 +58,6 @@ package com.view
 			onRenderTick();
 		}
 		
-		/**
-		 * @private
-		 */
 		private function init(e:Event = null):void {
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
@@ -74,16 +71,10 @@ package com.view
 			startRendering();
 		}
 		
-		/**
-		 * @private
-		 */
 		public function onRenderTick(e:Event = null):void {
 			
 		}
 		
-		/**
-		 * @private
-		 */
 		private function onResize(event:Event = null):void {
 			if (_scaleToStage) {
 				cam.view.width = stage.stageWidth;
