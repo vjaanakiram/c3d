@@ -288,5 +288,10 @@ package com.view
 			//camera.rotationZ = mySnake.head.rotationZ+Math.PI; // Math.PI = 180 deg
 			camera.render(stage3D);
 		}
+		
+		public function onStageResize(e:Event):void{
+			camera.view.width = stage.stageWidth;
+			camera.view.height = stage.stageHeight;
+		}
 	}
 }
