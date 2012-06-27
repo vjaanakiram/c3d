@@ -21,6 +21,7 @@ package com.view
 	
 	import com.Elements.MySnake;
 	import com.Elements.Snake;
+	import com.Utils3d.MatCont;
 	import com.Utils3d.SpringCameraController;
 	import com.greensock.*;
 	import com.greensock.easing.*;
@@ -36,35 +37,6 @@ package com.view
 	import flash.ui.Keyboard;
 	
 	public class BalaBase3d extends HelloAlternativa3D{
-		// params.wmode="direct" //bala
-		//-locale en_US -use-network=false -swf-version=13
-		
-		//i think you need to clean all your stagged files using  or git rm --cached config/database.yml
-		//git rm -r --cached .
-		//git add .
-		//but make sure you commit your changes before doing this .
-		
-		[Embed(source="/images/bark_diffuse.jpg")] private static const EmbedBarkDiffuse:Class;
-		[Embed(source="/images/bark_normal.jpg")] private static const EmbedBarkNormal:Class;
-		[Embed(source="/images/wood.jpg")] private static const EmbedGrassDiffuse:Class;
-		
-		
-		[Embed(source = "/images/skybox/left.jpg")] static private const left_t_c:Class;
-		private var left_t:BitmapTextureResource = new BitmapTextureResource(new left_t_c().bitmapData);
-		[Embed(source = "/images/skybox/right.jpg")] static private const right_t_c:Class;
-		private var right_t:BitmapTextureResource = new BitmapTextureResource(new right_t_c().bitmapData);
-		[Embed(source = "/images/skybox/top.jpg")] static private const top_t_c:Class;
-		private var top_t:BitmapTextureResource = new BitmapTextureResource(new top_t_c().bitmapData);
-		[Embed(source = "/images/skybox/bottom.jpg")] static private const bottom_t_c:Class;
-		private var bottom_t:BitmapTextureResource = new BitmapTextureResource(new bottom_t_c().bitmapData);
-		[Embed(source = "/images/skybox/front.jpg")] static private const front_t_c:Class;
-		private var front_t:BitmapTextureResource = new BitmapTextureResource(new front_t_c().bitmapData);
-		[Embed(source = "/images/skybox/back.jpg")] static private const back_t_c:Class;
-		private var back_t:BitmapTextureResource = new BitmapTextureResource(new back_t_c().bitmapData);
-		
-		//BAla collada..
-		[Embed(source="/images/Bala1.dae", mimeType="application/octet-stream")]
-		protected var bmodel:Class;
 		
 		private var controller:SimpleObjectController;
 		//private var cameraContoller:SpringCameraController;
@@ -74,7 +46,6 @@ package com.view
 		public static var ww:Number;
 		public static var hh:Number;
 		public var cameraDistance:Number = -300;
-		
 		private var bxml:XML;
 		private var bparser:ParserCollada = new ParserCollada();
 		
@@ -84,7 +55,7 @@ package com.view
 			super(ww,hh,scaleMode);
 			//super.addEventListener("NS3D",noStage3D);
 			super.addEventListener("S3D",BReady);
-			bxml = new XML(new bmodel());
+			bxml = new XML(new MatCont.bmodel());
 		}
 		
 		private function BReady(e:Event):void{
@@ -124,7 +95,7 @@ package com.view
 			for each (var dogResource:Resource in dog.getResources()) {
 				trace(" got myModel dogResource",dogResource)
 				if(dogResource is Mesh){
-					Mesh(dogResource).setMaterialToAllSurfaces(new left_t_c().bitmapData);
+					Mesh(dogResource).setMaterialToAllSurfaces(new MatCont.left_t_c().bitmapData);
 				}
 				dogResource.upload(stage3D.context3D);
 			}
@@ -140,12 +111,12 @@ package com.view
 		
 		private function addSky():void{
 			skyBox = new SkyBox(3000, 
-				new TextureMaterial(left_t), 
-				new TextureMaterial(right_t), 
-				new TextureMaterial(back_t), 
-				new TextureMaterial(front_t), 
-				new TextureMaterial(bottom_t), 
-				new TextureMaterial(top_t), 0.01);
+				new TextureMaterial(MatCont.left_t), 
+				new TextureMaterial(MatCont.right_t), 
+				new TextureMaterial(MatCont.back_t), 
+				new TextureMaterial(MatCont.front_t), 
+				new TextureMaterial(MatCont.bottom_t), 
+				new TextureMaterial(MatCont.top_t), 0.01);
 			rootContainer.addChild(skyBox);
 		}
 		
@@ -153,17 +124,12 @@ package com.view
 			mySnake = new MySnake();
 			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
 			rootContainer.addChild(mySnake);
-			var grass_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedGrassDiffuse().bitmapData);
-			var grass_normal:BitmapTextureResource = new BitmapTextureResource(new BitmapData(1, 1, false, 0x7F7FFF));
 			
-			var bark_diffuse:BitmapTextureResource = new BitmapTextureResource(new EmbedBarkDiffuse().bitmapData);
-			var bark_normal:BitmapTextureResource = new BitmapTextureResource(new BitmapData(1,1,false,0xff0000));//new EmbedBarkNormal().bitmapData);
-			
-			bark_diffuse.upload(stage3D.context3D);
-			bark_normal.upload(stage3D.context3D);
-			var grassMaterial:StandardMaterial = new StandardMaterial(grass_diffuse, grass_normal);
+			MatCont.bark_diffuse.upload(stage3D.context3D);
+			MatCont.bark_normal.upload(stage3D.context3D);
+			var grassMaterial:StandardMaterial = new StandardMaterial(MatCont.grass_diffuse, MatCont.grass_normal);
 			grassMaterial.specularPower = 0.24;
-			var barkMaterial:StandardMaterial = new StandardMaterial(bark_diffuse, bark_normal);
+			var barkMaterial:StandardMaterial = new StandardMaterial(MatCont.bark_diffuse, MatCont.bark_normal);
 			barkMaterial.specularPower = .4
 			
 			var platform:Box = new Box(300, 300, 50);
@@ -172,13 +138,13 @@ package com.view
 			platform.z = 25;
 			//rootContainer.addChild(platform);
 			
-			var grass:Plane = new Plane(900, 900,10,10);//______________________________
-			grass.geometry.upload(stage3D.context3D);
+			var floor:Plane = new Plane(900, 900,10,10);//______________________________
+			floor.geometry.upload(stage3D.context3D);
 			
 			//grass.setMaterialToAllSurfaces(new FillMaterial(0xcccccc));
-			grass.setMaterialToAllSurfaces(grassMaterial);
-			rootContainer.addChild(grass);
-			grass.z = -5;
+			floor.setMaterialToAllSurfaces(grassMaterial);
+			rootContainer.addChild(floor);
+			floor.z = -5;
 			uploadResources(mySnake.getResources(true));
 			
 			
