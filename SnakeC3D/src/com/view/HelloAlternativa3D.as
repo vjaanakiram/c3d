@@ -1,5 +1,5 @@
 package com.view {
-
+	
 	import alternativa.engine3d.core.Camera3D;
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.Resource;
@@ -12,11 +12,12 @@ package com.view {
 	import flash.display.Stage3D;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.display3D.Context3DRenderMode;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.system.ApplicationDomain;
 	import flash.system.Capabilities;
-
+	
 	/**
 	 * Alternativa3D "Hello world!" application. 
 	 * Создание простейшего трёхмерного приложения.
@@ -82,11 +83,18 @@ package com.view {
 					+'\nPlease upgrade to Flash 11'
 					+'\nso you can play 3d games!';
 			}
-			dispatchEvent(new Event(Cont3D.MSG));
+			dispatchEvent(new Event(Cont3D.MSG,true));
 			//dispatchEvent(new Event("NS3D"));
 		}
 		
 		private function onContextCreate(e:Event):void {
+			if(stage3D.context3D.driverInfo.toLocaleLowerCase().substr(0,8)!=Context3DRenderMode.SOFTWARE){
+				msgStr = 'Stage3D Available... \nYour GPU Supports Stage3d :-) \n'+stage3D.context3D.driverInfo;
+			}else{
+				msgStr = 'Stage3D Available... \nYour GPU NOT Supports Stage3d :-( \n'+stage3D.context3D.driverInfo+"\nYou may experience poor performance..";
+			}
+			trace("stage3DAvailable is true!",msgStr);
+			dispatchEvent(new Event(Cont3D.MSG,true));
 			dispatchEvent(new Event("S3D"));
 			for each (var resource:Resource in rootContainer.getResources(true)) {
 				resource.upload(stage3D.context3D);
@@ -112,7 +120,7 @@ package com.view {
 				+'\nIs wmode=direct in the html?'
 				+'\nExpect poor performance.';
 			
-			dispatchEvent(new Event(Cont3D.MSG));
+			dispatchEvent(new Event(Cont3D.MSG,true));
 		}
 		
 		public function addSnake(snake:Box):void{

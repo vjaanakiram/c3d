@@ -40,6 +40,9 @@ package com.Utils3d
 		[Embed(source = "/images/skybox/back.jpg")] public static const back_t_c:Class;
 		public static var back_t:BitmapTextureResource = new BitmapTextureResource(new back_t_c().bitmapData);
 		
+		[Embed(source="/model/balamodel3ds.a3d", mimeType="application/octet-stream")]
+		private const Model:Class;
+		
 		//BAla collada..
 		[Embed(source="/images/Bala1.dae", mimeType="application/octet-stream")]
 		public static var bmodel:Class;

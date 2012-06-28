@@ -9,6 +9,7 @@ package{
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 	
 	
 	public class SnakeC3D extends Sprite{
@@ -34,7 +35,10 @@ package{
 			//balaBase.x = 50;
 			//balaBase.y = 50;
 			titlescreenTf.width = 250;
-			titlescreenTf.x = balaBase.x + 400;
+			titlescreenTf.multiline = true;
+			titlescreenTf.wordWrap = true;
+			titlescreenTf.defaultTextFormat = new TextFormat(null,15,0xffffff);
+			//titlescreenTf.x = balaBase.x + 400;
 			addChild(titlescreenTf);
 			
 			stage.addEventListener(Event.RESIZE, resizeListener);
@@ -55,7 +59,7 @@ package{
 		}
 		
 		private function gotMsg(e:Event):void{
-			//titlescreenTf.text = BalaBase3d.msgStr;
+			titlescreenTf.text = balaBase.msgStr;
 		}
 	}
 }

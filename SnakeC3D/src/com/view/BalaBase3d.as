@@ -123,6 +123,7 @@ package com.view
 		private function addElements():void{
 			mySnake = new MySnake();
 			mySnake.addEventListener(Snake.ADDED_PART,addedNewSnakePart);
+			//cameraContainer.addChild(mySnake)
 			rootContainer.addChild(mySnake);
 			
 			MatCont.bark_diffuse.upload(stage3D.context3D);
