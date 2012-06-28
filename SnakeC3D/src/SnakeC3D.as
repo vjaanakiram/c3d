@@ -34,7 +34,7 @@ package{
 			addChild(balaBase);
 			//balaBase.x = 50;
 			//balaBase.y = 50;
-			titlescreenTf.width = 250;
+			titlescreenTf.width = 310;
 			titlescreenTf.multiline = true;
 			titlescreenTf.wordWrap = true;
 			titlescreenTf.defaultTextFormat = new TextFormat(null,15,0xffffff);

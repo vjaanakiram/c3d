@@ -91,7 +91,7 @@ package com.view {
 			if(stage3D.context3D.driverInfo.toLocaleLowerCase().substr(0,8)!=Context3DRenderMode.SOFTWARE){
 				msgStr = 'Stage3D Available... \nYour GPU Supports Stage3d :-) \n'+stage3D.context3D.driverInfo;
 			}else{
-				msgStr = 'Stage3D Available... \nYour GPU NOT Supports Stage3d :-( \n'+stage3D.context3D.driverInfo+"\nYou may experience poor performance..";
+				msgStr = 'Stage3D Available... \nYour GPU NOT Supports Stage3d :-( \n'+stage3D.context3D.driverInfo+"\nRenderMode:Software \nYou may experience poor performance..";
 			}
 			trace("stage3DAvailable is true!",msgStr);
 			dispatchEvent(new Event(Cont3D.MSG,true));
